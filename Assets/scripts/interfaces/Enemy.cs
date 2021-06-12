@@ -6,4 +6,5 @@ public interface IEnemy
 
     void takeDamage(int damage);
     int health { get; set; }
+    int score { get; set; }
 }

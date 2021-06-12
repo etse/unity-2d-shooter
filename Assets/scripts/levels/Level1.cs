@@ -9,6 +9,7 @@ public class Level1 : MonoBehaviour
     public Transform centerSpawn;
     public Transform rightSpawn;
     public GameObject basicEnemy;
+    public GameObject bigEnemy;
 
 
     // Start is called before the first frame update
@@ -31,6 +32,8 @@ public class Level1 : MonoBehaviour
         yield return StartCoroutine(createSecondWave());
         yield return new WaitForSeconds(1.0f);
         yield return StartCoroutine(createThirdWave());
+        yield return new WaitForSeconds(1.0f);
+        yield return StartCoroutine(createFourthWave());
 
 
         yield return new WaitForSeconds(5.0f);
@@ -83,9 +86,37 @@ public class Level1 : MonoBehaviour
         }
     }
 
+    private IEnumerator createFourthWave()
+    {
+        var spawnOrder = new List<Vector3> { leftSpawn.position, rightSpawn.position };
+        var acceleration = new List<Vector3> { new Vector3(0.9f, -0.35f, 0f), new Vector3(-0.9f, -0.35f, 0f) };
+        for (var x = 0; x < 20; x++)
+        {
+            var behaviour = new EnemyAccelerating()
+                .withSpeed(new Vector3(0f, -1.2f, 0f))
+                .withAcceleration(acceleration[x % acceleration.Count]);
+
+            spawnWithBehaviour(spawnOrder[x % spawnOrder.Count], behaviour);
+
+            if (x % 3 == 1)
+            {
+                spawnBigWithBehaviour(centerSpawn.position, new EnemySlideOverScreen(new Vector3(0, -2.2f, 0)));
+            }
+
+            yield return new WaitForSeconds(1.0f);
+        }
+    }
+
     private void spawnWithBehaviour(Vector3 location, INPCBehaviour behaviour)
     {
         var enemy = Instantiate(basicEnemy, location, Quaternion.identity);
+        var enemyScript = enemy.GetComponent<IEnemy>();
+        enemyScript.setBehaviour(behaviour);
+    }
+
+    private void spawnBigWithBehaviour(Vector3 location, INPCBehaviour behaviour)
+    {
+        var enemy = Instantiate(bigEnemy, location, Quaternion.identity);
         var enemyScript = enemy.GetComponent<IEnemy>();
         enemyScript.setBehaviour(behaviour);
     }

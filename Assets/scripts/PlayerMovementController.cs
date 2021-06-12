@@ -17,6 +17,11 @@ public class PlayerMovementController : MonoBehaviour
         forceInsideBounds();
     }
 
+    public void setVelocity(Vector3 newVelocity)
+    {
+        velocity = newVelocity;
+    }
+
     private void updateVelocity()
     {
         Vector2 direction = Vector2.zero;

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class EnemySlideOverScreen : INPCBehaviour
 {
-    private Vector3 speed = new Vector3(0, -1, 0);
+    private Vector3 speed = new Vector3(0, -1.5f, 0);
 
     public EnemySlideOverScreen()
     {
