@@ -27,6 +27,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7021689978620807117}
   m_RootOrder: 0
@@ -44,7 +45,7 @@ AudioSource:
     type: 2}
   m_audioClip: {fileID: 8300000, guid: 2b8e439da4e636f498198f0807d9c3ba, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 0.04
+  m_Volume: 0.02
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -158,6 +159,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.008, y: -1.331, z: 0}
   m_LocalScale: {x: 0.2, y: 0.2, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6891426345196522263}
   m_Father: {fileID: 0}
@@ -174,6 +176,7 @@ SpriteRenderer:
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -226,8 +229,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 428221dbc54212d4a9a3aab5e48affdd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  speed: 20
+  damage: 10
+  direction: {x: 0, y: 1, z: 0}
   rigidBody: {fileID: -1119502770298231203}
   hitSound: {fileID: 6444155948775580640}
+  friendly: 1
 --- !u!50 &-1119502770298231203
 Rigidbody2D:
   serializedVersion: 4

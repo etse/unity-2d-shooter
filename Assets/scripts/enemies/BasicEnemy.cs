@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BasicEnemy : MonoBehaviour, IEnemy
+public class BasicEnemy : MonoBehaviour
 {
-    public int health { get; set; }
-    public int score { get; set; }
+    public int health = 20;
+    public int score = 50;
+
     public Material flashMaterial;
     public bool isDead = false;
 
@@ -13,18 +14,16 @@ public class BasicEnemy : MonoBehaviour, IEnemy
     private float flashUntil = 0f;
     private bool isFlashing = false;
     private CameraShaker cameraShaker;
-    private PlayerScore playerScore;
+    private PlayerState playerScore;
     private INPCBehaviour npcBehaviour;
 
 
     // Start is called before the first frame update
     protected void Start()
     {
-        health = 20;
-        score = 50;
         defaultMaterial = GetComponent<SpriteRenderer>().material;
         cameraShaker = CameraShaker.Instance;
-        playerScore = PlayerScore.Instance;
+        playerScore = PlayerState.Instance;
     }
 
     // Update is called once per frame
@@ -74,7 +73,14 @@ public class BasicEnemy : MonoBehaviour, IEnemy
                 GetComponent<Animator>().SetBool("isDead", true);
             }
         }
+    }
 
+    public void shoot()
+    {
+        if(!isDead)
+        {
+            GetComponent<IEnemyWeapon>().shoot(gameObject.transform);
+        }
     }
 
     private void flash()

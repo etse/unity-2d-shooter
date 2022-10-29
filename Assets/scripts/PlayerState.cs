@@ -1,23 +1,24 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 
-public class PlayerScore
+public class PlayerState
 {
-    private static PlayerScore instance = null;
+    private static PlayerState instance = null;
     public int score = 0;
+    public int currentLevel = 0;
 
-    private PlayerScore()
+    private PlayerState()
     {
 
     }
 
-    public static PlayerScore Instance
+    public static PlayerState Instance
     {
         get
         {
             if (instance == null)
             {
-                instance = new PlayerScore();
+                instance = new PlayerState();
             }
             return instance;
         }

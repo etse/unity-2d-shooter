@@ -32,7 +32,7 @@ public class PlayerBasicsController : MonoBehaviour
         }
     }
 
-    private void takeDamage(int damage)
+    public void takeDamage(int damage)
     {
         var currentTime = Time.time;
         if (currentTime > invulUntil)
@@ -50,7 +50,7 @@ public class PlayerBasicsController : MonoBehaviour
 
     private void OnTriggerStay2D(Collider2D collision)
     {
-        var enemy = collision.GetComponent<IEnemy>();
+        var enemy = collision.GetComponent<BasicEnemy>();
         if (enemy != null)
         {
             takeDamage(20);

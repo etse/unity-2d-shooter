@@ -1,33 +1,46 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System.Collections.Generic;
 
 public class PlayerWeaponController: MonoBehaviour
-{
-    public Transform firepoint_left;
-    public Transform firepoint_right;
-    public GameObject bullet;
-    public AudioSource sfx;
-    
-    private float cooldown = 0.3f;
-    private float cooldownTil = 0;
+{    
+    private PlayerControls controls;
+    private ShipUpgrades shipUpgrades;
+
+    private void Awake()
+    {
+        controls = new PlayerControls();
+        shipUpgrades = ShipUpgrades.getInstance();
+
+        if (shipUpgrades.currentWeapon == null)
+        {
+            shipUpgrades.currentWeapon = PulseCannon.name;
+        }
+
+        if (!controls.Player.enabled)
+        {
+            controls.Player.Enable();
+        }
+    }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKey(KeyCode.Space))
+        if (controls.Player.Shoot.IsPressed())
         {
-            shoot();
+            getActiveWeapon().shoot();
         }
     }
 
-    private void shoot()
+    private IWeapon getActiveWeapon()
     {
-        if (Time.time > cooldownTil)
+        var weapon = shipUpgrades.currentWeapon;
+        if (weapon == PulseCannon.name)
         {
-            cooldownTil = Time.time + cooldown;
-            sfx.Play();
-            Instantiate(bullet, firepoint_left.position, firepoint_left.rotation);
-            Instantiate(bullet, firepoint_right.position, firepoint_right.rotation);
+            return GetComponent<PulseCannon>();
+        }
+        else
+        {
+            return GetComponent<PulseCannon>();
         }
     }
 }

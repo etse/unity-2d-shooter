@@ -1,13 +1,45 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerMovementController : MonoBehaviour
 {
     private Vector2 velocity = Vector2.zero;
-    private float acceleration = 45.0f;
+    private float acceleration = 35.0f;
     private float maxSpeed = 15.0f;
+    private float maxSpeedShooting = 7.5f;
     private float dampening = 10.0f;
+    PlayerControls playerControls;
+
+    private void Awake()
+    {
+        playerControls = new PlayerControls();
+        if (!playerControls.Player.enabled)
+        {
+            playerControls.Player.Enable();
+            playerControls.Cheat.Enable();
+
+            playerControls.Cheat.IncreaseWeaponLevel.performed += increaseWeaponLevel;
+            playerControls.Cheat.DecreaseWeaponLevel.performed += decreaseWeaponLevel;
+        }
+    }
+
+    private void OnDestroy()
+    {
+        playerControls.Cheat.IncreaseWeaponLevel.performed -= increaseWeaponLevel;
+        playerControls.Cheat.IncreaseWeaponLevel.performed -= decreaseWeaponLevel;
+    }
+
+    void increaseWeaponLevel(InputAction.CallbackContext ctx)
+    {
+        ShipUpgrades.getInstance().increaseWeaponLevel();
+    }
+
+    void decreaseWeaponLevel(InputAction.CallbackContext ctx)
+    {
+        ShipUpgrades.getInstance().decreaseWeaponLevel();
+    }
 
     // Update is called once per frame
     void Update()
@@ -24,23 +56,7 @@ public class PlayerMovementController : MonoBehaviour
 
     private void updateVelocity()
     {
-        Vector2 direction = Vector2.zero;
-        if (Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W))
-        {
-            direction.y += 1.0f;
-        }
-        if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A))
-        {
-            direction.x -= 1.0f;
-        }
-        if (Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.S))
-        {
-            direction.y -= 1.0f;
-        }
-        if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D))
-        {
-            direction.x += 1.0f;
-        }
+        Vector2 direction = playerControls.Player.Movement.ReadValue<Vector2>();
 
         if (direction.x * velocity.x <= 0)
         {
@@ -53,12 +69,15 @@ public class PlayerMovementController : MonoBehaviour
         }
 
 
-        direction = direction.normalized * acceleration * Time.deltaTime;
+        direction = direction * acceleration * Time.deltaTime;
         velocity = velocity + direction;
 
-        if (velocity.magnitude > maxSpeed)
+        var isShooting = playerControls.Player.Shoot.IsPressed();
+        var maxSpeedToUse = isShooting ? maxSpeedShooting : maxSpeed;
+
+        if (velocity.magnitude > maxSpeedToUse)
         {
-            velocity = velocity.normalized * maxSpeed;
+            velocity = velocity.normalized * maxSpeedToUse;
         }
     }
 

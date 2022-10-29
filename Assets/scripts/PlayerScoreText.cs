@@ -5,11 +5,11 @@ using UnityEngine.UI;
 
 public class PlayerScoreText : MonoBehaviour
 {
-    private PlayerScore playerScore;
+    private PlayerState playerScore;
     // Start is called before the first frame update
     void Start()
     {
-        playerScore = PlayerScore.Instance;
+        playerScore = PlayerState.Instance;
     }
 
     // Update is called once per frame
